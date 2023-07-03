@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background: #ECF0F1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+<!--        <div class="col">-->
+<!--        </div>-->
+        <div class="col-5">
+            <br>
+            <h1><b th:text="#{shopping}">Shopping Cart</b></h1>
+            <br>
+            <a class="btn btn-info" th:href="@{/index}" th:text="#{backtoshop}">Back To Shop</a>
+            <div th:each="cart:${carts}">
+                <div>
+                    <br>
+                    <p><span></span><img th:src="'photo/' + ${#strings.arraySplit(cart.get('photo'), ',')[0]}" style="width: 85px;height: 120px"></p>
+                    <p><span><b th:text="#{title}">Title: </b> </span><a style="text-decoration: none;" th:href="@{/detail(id=${cart.get('idProduct')})}" th:text="${cart.get('title')}"></a></p>
+                    <p><span><b th:text="#{quantity}">Quantity: </b> </span><span th:text="${cart.get('quantity')}"></span></p>
+                    <p><span><b th:text="#{says}" id="says"  style="display: none"></b></p>
+                    <p><span><b th:text="#{total_p}">Total Price: </b></span><span th:text="${cart.get('price')*cart.get('quantity')}"></span></p>
+                    <a class="btn btn-danger" th:href="@{/deletecart(id=${cart.get('id')})}" id="delete"  onclick="confirmDelete(event)" th:text="#{cancel}"></a>
+<!--                    th:href="@{/deletecart(id=${cart.id})}"-->
+                    
+                </div>
+                <b style="opacity:50%"> ________________________________________________________________ </b>
+            </div>
+
+<!--            <a class="btn btn-danger" th:href="@{/deletecart(id=${cart.id})}" id="delete"  onclick="return confirm('Are you sure?')" th:text="Delete"></a>-->
+
+            <p> <br> <span> <b th:text="#{total_q}">Total Quantity:</b> </span> <span th:text="${totalQuantity}"></span></p>
+            <p> <span> <b th:text="#{total_p}">Total Price:</b> </span> <span th:text="${totalPrice}"></span></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script>
+function confirmDelete(event) {
+	var says = document.getElementById("says").textContent;
+    var message;
+
+    if (says) {
+        message = "Bạn chắc chứ?";
+    } else {
+        message = "Are you sure?";
+    }
+    let choice=confirm(message);
+	if(choice==true){return}
+	else{
+		event.preventDefault();
+	}
+}
+</script>
+</body>
+</html>

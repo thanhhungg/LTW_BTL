@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Manager</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background: #01579B;
+        }
+        .login-page {
+            width: 500px;
+            padding: 5%;
+            margin: auto;
+        }
+        .form {
+            background: #FFFFFF;
+            max-width: 500px;
+            padding: 45px;
+            text-align: center;
+            border-radius: 7px;
+        }
+        .form input {
+            font-family: "Roboto", sans-serif;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            border-radius: 7px;
+            outline: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        #loginbtn {
+            background: #8BC34A;
+            width: 50%;
+            border-radius: 7px;
+            /*border: 10px;*/
+            /*padding: 15px;*/
+            color: #FFFFFF;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #loginbtn:hover,#loginbtn:active,#loginbtn:focus {
+            background: #689F38;
+        }
+        #regbtn {
+            background: #0277BD;
+            width: 40%;
+            border-radius: 7px;
+            /*border: 10px;*/
+            /*padding: 15px;*/
+            color: #FFFFFF;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        #regbtn:hover,#regbtn:active,#regbtn:focus {
+            background: #0D47A1;
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="margin-top: 5%;">
+    <div class="row">
+        <center>
+        <div class="login-page">
+            <div class="form">
+                <form th:action="@{/login}"
+                      th:object="${account}" method="POST">
+                    <p th:if="${success}">Register Sucess</p>
+                    <input type="text" class="form-control" placeholder="Username" required th:field="*{username}" />
+                    <p th:if="${#fields.hasErrors('*{username}')}" th:errors="*{username}"></p>
+
+                    <input type="password" placeholder="Password" required class="form-control" th:field="*{password}" />
+                    <p th:if="${#fields.hasErrors('*{password}')}" th:errors="*{password}"></p>
+                    <p style="color: red;" th:if="${error}">Username or Password is incorrect. Try again</p>
+
+                    <input id="loginbtn" type="submit"  value="Login" />
+                    <br>
+                    <a class="btn btn-primary" id="regbtn" th:href="@{/registerForm}"> Sign Up </a>
+                </form>
+            </div>
+        </div>
+        </center>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Manager</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <style>
+        span {
+            color: crimson;
+            font-weight: bold;
+        }
+        body {
+            font-family: "Roboto", sans-serif;
+            background: #ECEFF1;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            color: green;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    	<br>
+        <H4 style="color:#1a14ba" ><b>Account Management</b></H4>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccountModal">Add</button>
+        <a class="btn btn-warning" th:href="@{/home}" th:text="Home"></a>
+    	<p style="color: red;"th:if="${error }">Duplicate information</p>
+		<p class="success-message" style="color: green;" th:if="${success}">Create new account successfully</p>
+		<p class="success-message" style="color: green;"  th:if="${message}">Delete account successfully</p>
+		
+        <!-- Modal -->
+        <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAccountModalLabel">Add Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form to input account details -->
+                        <form th:action="@{/add/account}" th:object="${account}" method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                               <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Password</label>
+								<input type="text" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+								<input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+								<input type="text" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="isAdmin" class="form-label">Is Admin</label>
+                                <select type="number" class="form-control" id="isadmin" name="isadmin" required>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure?')" >Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-3">
+            <div class="container mt-3">
+                <div class="search-container mb-3">
+
+                </div>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-dark">
+                    <tr>
+                        <th style="text-align:center;"scope="col">ID</th>
+                        <th style="text-align:center;"scope="col">UserName</th>
+                        <th style="text-align:center;"scope="col">Name</th>
+                        <th style="text-align:center;"scope="col">Email</th>
+                        <th style="text-align:center;"scope="col">IsAdmin</th>
+                        <th style="text-align:center;"scope="col">Function</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${accounts}">
+                        <th style="text-align:center;"th:text="${account.id}"></th>
+                        <th style="text-align:center;"th:text="${account.username}"></th>
+                        <th style="text-align:center;"th:text="${account.name}"></th>
+                        <th style="text-align:center;"th:text="${account.email}"></th>
+                        <th style="text-align:center;"th:text="${account.isadmin}"></th>
+                        <td style="text-align:center;">
+                            <a class="btn btn-danger" th:href="@{/delete/account(id=${account.id})}" id="delete"  onclick="return confirm('Are you sure?')" th:text="Delete"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</body>
+</html>

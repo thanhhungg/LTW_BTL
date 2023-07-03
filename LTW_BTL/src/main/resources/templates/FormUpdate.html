@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        // $( function() {
+        //     $( "#datepicker" ).datepicker();
+        // } );
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background: #ECEFF1;
+        }
+
+	.product-small-img img{
+		height:92px;
+		width:60px;
+		margin:10px 0;
+		cursor:pointer;
+		display:block;
+		opacity:.6;
+	}
+	.product-small-img{
+		float:left
+	}
+	.product-small-img img:hover{
+		opacity:1;
+	}
+	.product{
+	top:16%;
+	left:64%;
+	transform: translate(—50px,-50px);
+	position: absolute;
+	}
+	.img-container img {
+		height:500px;
+		width:350px;
+	}
+	.img-container{
+		float:right;
+		padding:10px;
+	}
+    </style>
+</head>
+<body>
+<div class="container">
+    <br/>
+    <div class="container text-center">
+    <h1><b th:text="#{book}">BOOK</b></h1>
+
+    <p style="color: red;"th:if="${error}">Duplicate information</p>
+    </div>
+    <form th:action="@{/update1}"
+          th:object="${book}" method="POST">
+          <div class="row" >
+            <div class="col-5">
+                <input type="text" id="textInput" class="form-control" disabled th:field="*{id}" style="display: none" />
+                <p th:if="${#fields.hasErrors('*{id}')}" th:errors="*{id}"></p>
+                <br/>
+                <div class="row"  >
+                <div class="col-6">
+                <b th:text="#{title_s}">Title*:</b>
+                <input type="text" id="textInput"  class="form-control" th:disabled="${check!=-1}" th:field="*{title}" />
+                <p style="color: red;"th:if="${#fields.hasErrors('*{title}')}" th:errors="*{title}"></p>
+                </div>
+                <div class="col-6">
+                <b th:text="#{author_s}">Author*:</b>
+                <input type="text" id="textInput"  class="form-control" th:disabled="${check!=-1}" th:field="*{author}" />
+                <p style="color: red;"th:if="${#fields.hasErrors('*{author}')}" th:errors="*{author}"></p>
+                </div>
+                </div>
+                </br>
+                <b th:text="#{description}">Description:</b>
+                <textarea class="form-control" id="textInput" th:disabled="${check!=-1}" th:field="*{description}"> </textarea>
+<!--                <textarea type="text" class="form-control" name="description" placeholder="Comment"></textarea>-->
+                <p th:if="${#fields.hasErrors('*{description}')}" th:errors="*{description}"></p>
+                <br/>
+                <div class="row"  >
+                <div class="col-6">
+	               <b th:text="#{publishdate_s}" >Publish Date*:</b>
+	                <input type="date" class="form-control" id="datepicker" name="created"  onchange="changeDate(event)" th:disabled="${check!=-1}" th:value="${#dates.format(book.datepublic, 'yyyy-MM-dd')}" placeholder="dd-MM-yyyy" />
+	                <p  th:if="${#fields.hasErrors('*{datepublic}')}"></p>
+	                </div>
+	                <div class="col-6">
+	                <b th:text="#{pagenumber}">Page Number:</b>
+	                <input type="text" class="form-control" id="textInput"  th:disabled="${check!=-1}" th:field="*{pagenumber}" />
+	                <p th:if="${#fields.hasErrors('*{pagenumber}')}" th:errors="*{pagenumber}"></p>
+	                <br/>
+                </div>
+                </div>
+                <div class="row"  >
+                <div  class="col-6">
+                <b th:text="#{category}">Category:</b>
+<!--                <input type="text" class="form-control" th:field="*{category}" />-->
+                <select class="form-select" aria-label="Default select example" id="textInput"  th:disabled="${check!=-1}" th:field="*{category}">
+                    <option selected value="Math">Math</option>
+                    <option value="Security">Security</option>
+                    <option value="Science">Science</option>
+                    <option value="Story">Story</option>
+                    <option value="Children's">Children's</option>
+                </select>
+                <p th:if="${#fields.hasErrors('*{category}')}" th:errors="*{category}"></p>
+                </div>
+                <br/>
+                <div class="col-6">
+                <b th:text="#{price}">Price</b>
+                <input type="text"  th:disabled="${check!=-1}" id="textInput" class="form-control"  disabled th:field="*{price}" />
+                <p th:if="${#fields.hasErrors('*{price}')}" th:errors="*{price}"></p>
+                <p><span><b th:text="#{says}" id="says"  style="display: none"></b></p>
+                <br/>
+                </div>
+                </div> 
+            </div>
+            <div class="col-7" style="text-align: right;">
+                <div  style="text-align: right;">
+                </div>
+                <input type="text" class="form-control" id="input2" th:field="*{photo}" style="display: none"/>
+                <input type="file" name="fileImg[]" id="fileImg" multiple onchange="preview();">
+				<br/>	
+				<div class="product" th:if="${photoUrls}">
+				<div class="product-small-img" id="imageBox_sub" >
+					<div th:each="photoUrl: ${#strings.arraySplit(photoUrls, ',')}">
+				      <img class="img-thumbnail thumbnail-image" th:src="'photo/' + ${photoUrl}"  onclick="changeMainImage(this)" />
+				    </div>
+				</div>
+				<div id="imageBox_tmp" class="img-container">
+					<img class="img-thumbnail main-image" id="imageBox" th:src="'photo/' + ${#strings.arraySplit(photoUrls, ',')[0]}" onclick="changeMainImage(this)" />
+				</div>
+				</div>
+                <p th:if="${#fields.hasErrors('*{photo}')}" th:errors="*{photo}"></p>
+                <br/>
+            </div>
+        </div>
+        <br/>
+        <br><br><br><br><br>
+        <footer>
+        <div style="text-align: right;display: none;" id="btnEdit" >
+        <a style="opacity:20%"> _______________________________________________________________________________________________________________________________________________________________________________________ </a>  
+        <input type="submit" class="btn btn-success" onclick="checkNull(event)" value="Save" />
+        
+        </div>
+        <div  th:style="${check==-1 ? 'display:block; text-align:right' : 'display:none'}">
+        <a style="opacity:20%"> _______________________________________________________________________________________________________________________________________________________________________________________ </a>  
+            <input type="submit"   class="btn btn-success"  onclick="checkNull(event)" value="Add book" />
+        </div>
+        </footer>
+
+    </form>
+    <script type="text/javascript">
+    function preview() {
+    	  var totalFiles = $('#fileImg').get(0).files.length;
+    	  $('#imageBox_tmp').empty();
+    	  $('#imageBox_sub').empty();
+    	  $('#imageBox_tmp').append("<img  src='" + URL.createObjectURL(event.target.files[0]) + "'>");
+    	  for (var i = 0; i < totalFiles; i++) {
+    	    var file = event.target.files[i];
+    	    $('#imageBox_sub').append("<img src='" + URL.createObjectURL(file) + "'>");
+    	  }
+
+    	  $(document).ready(function () {
+      	    var formData = new FormData();
+
+      	    var totalFiles = $("#fileImg").get(0).files.length;
+      	    for (var i = 0; i < totalFiles; i++) {
+      	      formData.append("fileImg[]", $("#fileImg").get(0).files[i]);
+      	    }
+
+      	    var formDataValues = [];
+      	    for (var pair of formData.entries()) {
+      	      var file = pair[1];
+      	      formDataValues.push(file.name);
+      	    }
+
+      	    $('#input2').val(formDataValues.join(','));
+      	  });
+    	}
+
+</script>
+    <footer>
+    <div th:style="${check!=-1 ? 'display:block; text-align:right' : 'display:none'}" id="btnRemoveDisable">
+    <a style="opacity:20%"> _______________________________________________________________________________________________________________________________________________________________________________________ </a>
+        <input type="submit"  class="btn btn-primary" onclick="RemoveDisable()" value="Edit" />
+    </div>
+    </footer>
+</div>
+<script>
+	function changeMainImage(element) {
+	    var mainImage = document.getElementById('imageBox');
+	    mainImage.src = element.src;
+	  }
+	function getImage(){
+	    var photo = $("#photo")[0].files[0];
+	    //console.log(photo);
+	    var reader = new FileReader();
+	    reader.readAsDataURL(photo);
+	    reader.onloadend = function (e) {
+	        console.log(e.target.result);
+	        $("#image").attr("src", e.target.result);
+	       
+	        document.getElementById('input').setAttribute('value', e.target.result);
+	    }
+	}
+    function RemoveDisable(){
+        var inputText = document.querySelectorAll("#textInput");
+        console.log($("#textInput"));
+        for(let i =0 ; i< inputText.length ; i++){
+            inputText[i].disabled = false;
+        }
+        var datepicker = document.querySelector("#datepicker");
+        datepicker.disabled = false;
+        datepicker.type="date";
+
+        //var photos = document.querySelector("#photo");
+        //photos.disabled = false;
+
+
+        var btnEdit = document.querySelector("#btnEdit");
+        btnEdit.style.display = "block";
+        var btnRemoveDisable = document.querySelector("#btnRemoveDisable");
+        btnRemoveDisable.style.display = "none";
+
+    }
+
+    function changeDate(event){
+        var date1 = document.getElementById("datepicker");
+        date1.value = event.target.value;
+        
+    }
+    function checkNull(event){
+    	var arr = document.querySelectorAll("#textInput");
+    	console.log(arr)
+    	var title = arr[1].value;
+    	var author = arr[2].value;
+    	var date1 = document.getElementById("datepicker");
+    	if(title==""||author==""||date1.value==""){
+    		event.preventDefault();
+    		alert("Fill in the fields marked with (*)");
+    		return;
+    	}
+    	
+    	var says = document.getElementById("says").textContent;
+        var message;
+
+        if (says) {
+            message = "Bạn chắc chứ?";
+        } else {
+            message = "Are you sure?";
+        }
+        let choice=confirm(message);
+		if(choice==true){return}
+		else{
+			event.preventDefault();
+		}
+    		
+    }
+
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</body>
+</html>

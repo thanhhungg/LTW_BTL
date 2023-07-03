@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NTH Book Store</title>
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        span {
+            color: crimson;
+            font-weight: bold;
+        }
+        body {
+            font-family: "Roboto", sans-serif;
+            background: #ECEFF1;
+        }
+        .image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-container img {
+            transition: transform 0.3s;
+        }
+        
+        .image-container:hover img {
+            transform: scale(1.2);
+        }
+         .input-group {
+            flex-wrap: nowrap;
+        }
+            .language-link {
+          display: inline-block;
+          margin-right: 10px;
+          text-decoration: none;
+          color: #333;
+    }
+    
+    .language-icon {
+          width: 20px;
+          height: 20px;
+          vertical-align: middle;
+    }
+    
+    .language-text {
+          margin-left: 5px;
+          vertical-align: middle;
+    }
+        
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row">
+    <div  class="col-9">
+    <br>
+    <H4 style="color:#1a14ba" ><b th:text="#{welcome}"> <br></b></H4> <br>
+    </div>
+    <div  class="col-3 ml-auto">
+    <br>
+    <a class="language-link" href="/index?lang=en">
+  <img class="language-icon" src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/store/english.svg" alt="English">
+  <span class="language-text">English</span>
+</a>
+<a class="language-link" href="/index?lang=vi">
+  <img class="language-icon" src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/default.svg" alt="Tiếng Việt">
+  <span class="language-text">Tiếng Việt</span>
+</a>
+
+    </div>
+    </div>
+    <h1 style="font-size: 18px;" th:if="${username}" th:text="#{welcome_sub} "></h1><h1 style="font-size: 18px;"><span th:text="${username}"> </span>, </h1>
+    <div class="row">
+    <div class="col-8">
+        <a class="btn btn-danger" th:if="${username}=='admin' " th:href="@{/home}" >Admin Panel</a>
+        <a class="btn btn-dark" th:if="${username}" th:href="@{/logout}" th:text="#{logout}"></a>
+        <a class="btn btn-dark" th:if="!${username}" th:href="@{/formLogin}" th:text="Login"></a>
+
+        <a class="btn btn-warning" th:if="${username}" th:href="@{/cartview}" th:text="#{yourcart}" ></a>
+        <a class="btn btn-primary" th:if="${username}" th:href="@{/sortprice(id=1)}" >▲</a>
+            <a class="btn btn-primary" th:if="${username}" th:href="@{/sortprice(id=-1)}" >▼</a>
+    </div>
+    <div  class="col-4 ml-auto">
+        <form action="/search" method="get" class="d-flex">
+          <div class="input-group">
+            <input type="text" id="searchInput" name="keyword" class="form-control">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
+            </div>
+          </div>
+        </form>
+        </div>
+           </div>
+    <div class="row">
+        <div class="container mt-3" style="margin-left: 90px;">
+            <div class="d-flex flex-wrap ">
+                <div th:each="book : ${books}" class="card" style="width: 200px; margin: 10px;">
+                    <a th:href="@{/detail(id=${book.id})}">
+                    <img class="card-img-top" style="width: 180px; height: 300px; object-fit: cover; cursor: pointer;"  th:src="'photo/' + ${#strings.arraySplit(book.photo, ',')[0]}" alt="Book cover" th:title="${book.title}">
+               		 </a>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${book.title}"></h5>
+                        <p class="card-text" style="color: #008000;" th:text="${book.author}"></p>
+                        <p class="card-text"  style="color: crimson; font-weight: bold;"th:text="${book.price}+đ"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--row-->
+</div> <!--container-->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script>
+    var searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", searchBooks);
+
+    function searchBooks() {
+        var input = document.getElementById("searchInput").value.toLowerCase();
+        var cards = document.getElementsByClassName("card");
+
+        for (var i = 0; i < cards.length; i++) {
+            var title = cards[i].querySelector(".card-title").innerText.toLowerCase();
+            var author = cards[i].querySelector(".card-text").innerText.toLowerCase();
+            if (title.includes(input) || author.includes(input)) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
